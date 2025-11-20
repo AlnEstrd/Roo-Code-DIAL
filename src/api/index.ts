@@ -5,11 +5,7 @@ import type { ProviderSettings, ModelInfo, ToolProtocol } from "@roo-code/types"
 import { dialDefaultApiVersion, dialDefaultModelId, dialDefaultModelInfo } from "@roo-code/types"
 
 import { ApiStream } from "./transform/stream"
-<<<<<<< HEAD
-import { normalizeDialBaseUrl } from "./providers/utils/normalize-dial-base-url"
-=======
-import { resolveDialApiConfig } from "./providers/utils/normalize-dial-base-url"
->>>>>>> codex/fix-epam-dial-for-roo-providers-jv8mye
+import { resolveDialApiConfig } from "./providers/utils/normalize-dial-base-url";
 
 import {
 	GlamaHandler,
@@ -171,11 +167,7 @@ export function buildApiHandler(configuration: ProviderSettings): ApiHandler {
 		case "deepinfra":
 			return new DeepInfraHandler(options)
 		case "dial": {
-<<<<<<< HEAD
-			const baseUrl = normalizeDialBaseUrl(options.dialBaseUrl)
-=======
-			const { apiBaseUrl, useAzure } = resolveDialApiConfig(options.dialBaseUrl)
->>>>>>> codex/fix-epam-dial-for-roo-providers-jv8mye
+			const { apiBaseUrl, modelDiscoveryUrl, useAzure } = resolveDialApiConfig(options.dialBaseUrl)
 			const apiKey = options.dialApiKey ?? ""
 			const modelId = options.dialModelId ?? dialDefaultModelId
 			const apiVersion = options.dialAzureApiVersion || dialDefaultApiVersion
