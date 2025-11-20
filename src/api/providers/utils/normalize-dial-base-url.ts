@@ -24,3 +24,23 @@ export function normalizeDialBaseUrl(baseUrl?: string): string {
 
 	return normalized || dialDefaultBaseUrl
 }
+
+export function resolveDialApiConfig(baseUrl?: string): {
+	apiBaseUrl: string
+	modelDiscoveryUrl: string
+	useAzure: boolean
+} {
+	const trimmed = (baseUrl ?? dialDefaultBaseUrl).trim()
+
+	if (/\/openai\/v1\/?$/i.test(trimmed)) {
+		const apiBaseUrl = trimmed.replace(/\/+$/, "")
+		return { apiBaseUrl, modelDiscoveryUrl: apiBaseUrl, useAzure: false }
+	}
+
+	const normalized = normalizeDialBaseUrl(trimmed)
+	return {
+		apiBaseUrl: normalized,
+		modelDiscoveryUrl: `${normalized}/openai`,
+		useAzure: true,
+	}
+}

@@ -5,7 +5,7 @@ import type { ModelInfo } from "@roo-code/types"
 import { dialDefaultModelInfo } from "@roo-code/types"
 
 import { DEFAULT_HEADERS } from "../constants"
-import { normalizeDialBaseUrl } from "../utils/normalize-dial-base-url"
+import { normalizeDialBaseUrl, resolveDialApiConfig } from "../utils/normalize-dial-base-url"
 
 const DialModelSchema = z.object({
 	id: z.string(),
@@ -45,6 +45,7 @@ const DialModelSchema = z.object({
 		.object({
 			cache: z.boolean().optional(),
 			prompt_cache: z.boolean().optional(),
+			tools: z.boolean().optional(),
 		})
 		.optional(),
 })
@@ -61,8 +62,8 @@ export async function getDialModels(apiKey: string, baseUrl?: string): Promise<R
 		"Api-Key": apiKey,
 	}
 
-	const normalizedBase = normalizeDialBaseUrl(baseUrl)
-	const url = `${normalizedBase}/openai/models`
+	const { modelDiscoveryUrl } = resolveDialApiConfig(baseUrl)
+	const url = `${modelDiscoveryUrl}/models`
 
 	const response = await axios.get(url, { headers })
 	const parsed = DialModelsResponseSchema.safeParse(response.data)

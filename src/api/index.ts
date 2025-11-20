@@ -5,7 +5,11 @@ import type { ProviderSettings, ModelInfo, ToolProtocol } from "@roo-code/types"
 import { dialDefaultApiVersion, dialDefaultModelId, dialDefaultModelInfo } from "@roo-code/types"
 
 import { ApiStream } from "./transform/stream"
+<<<<<<< HEAD
 import { normalizeDialBaseUrl } from "./providers/utils/normalize-dial-base-url"
+=======
+import { resolveDialApiConfig } from "./providers/utils/normalize-dial-base-url"
+>>>>>>> codex/fix-epam-dial-for-roo-providers-jv8mye
 
 import {
 	GlamaHandler,
@@ -167,22 +171,30 @@ export function buildApiHandler(configuration: ProviderSettings): ApiHandler {
 		case "deepinfra":
 			return new DeepInfraHandler(options)
 		case "dial": {
+<<<<<<< HEAD
 			const baseUrl = normalizeDialBaseUrl(options.dialBaseUrl)
+=======
+			const { apiBaseUrl, useAzure } = resolveDialApiConfig(options.dialBaseUrl)
+>>>>>>> codex/fix-epam-dial-for-roo-providers-jv8mye
 			const apiKey = options.dialApiKey ?? ""
 			const modelId = options.dialModelId ?? dialDefaultModelId
 			const apiVersion = options.dialAzureApiVersion || dialDefaultApiVersion
 
 			const headers = apiKey ? { "Api-Key": apiKey } : undefined
 
+			// For Azure mode, we need to append /openai to the base URL so the Azure SDK
+			// can construct deployment paths like: {baseURL}/deployments/{deployment}/chat/completions
+			const effectiveBaseUrl = useAzure ? `${apiBaseUrl}/openai` : apiBaseUrl
+
 			return new OpenAiHandler(
 				{
 					...options,
-					openAiBaseUrl: baseUrl,
+					openAiBaseUrl: effectiveBaseUrl,
 					openAiApiKey: apiKey || "not-provided",
 					openAiModelId: modelId,
 					openAiCustomModelInfo: dialDefaultModelInfo,
 					openAiHeaders: headers,
-					openAiUseAzure: true,
+					openAiUseAzure: useAzure,
 					azureApiVersion: apiVersion,
 				},
 				"DIAL",
