@@ -157,13 +157,18 @@ export class OpenAiHandler extends BaseProvider implements SingleCompletionHandl
 			}
 
 			const isGrokXAI = this._isGrokXAI(this.options.openAiBaseUrl)
+			// DIAL doesn't support stream_options for most models
+			// Check if we're using DIAL by looking at the base URL or provider name
+			const isDIAL =
+				this.providerName === "DIAL" ||
+				(this.options.openAiBaseUrl && this.options.openAiBaseUrl.includes("ai-proxy.lab.epam.com"))
 
 			const requestOptions: OpenAI.Chat.Completions.ChatCompletionCreateParamsStreaming = {
 				model: modelId,
 				temperature: this.options.modelTemperature ?? (deepseekReasoner ? DEEP_SEEK_DEFAULT_TEMPERATURE : 0),
 				messages: convertedMessages,
 				stream: true as const,
-				...(isGrokXAI ? {} : { stream_options: { include_usage: true } }),
+				...(isGrokXAI || isDIAL ? {} : { stream_options: { include_usage: true } }),
 				...(reasoning && reasoning),
 			}
 

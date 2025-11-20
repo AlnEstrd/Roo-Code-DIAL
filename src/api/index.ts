@@ -174,10 +174,14 @@ export function buildApiHandler(configuration: ProviderSettings): ApiHandler {
 
 			const headers = apiKey ? { "Api-Key": apiKey } : undefined
 
+			// For Azure mode, we need to append /openai to the base URL so the Azure SDK
+			// can construct deployment paths like: {baseURL}/deployments/{deployment}/chat/completions
+			const effectiveBaseUrl = useAzure ? `${apiBaseUrl}/openai` : apiBaseUrl
+
 			return new OpenAiHandler(
 				{
 					...options,
-					openAiBaseUrl: apiBaseUrl,
+					openAiBaseUrl: effectiveBaseUrl,
 					openAiApiKey: apiKey || "not-provided",
 					openAiModelId: modelId,
 					openAiCustomModelInfo: dialDefaultModelInfo,

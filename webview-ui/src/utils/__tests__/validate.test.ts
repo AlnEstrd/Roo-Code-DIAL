@@ -34,6 +34,16 @@ describe("Model Validation Functions", () => {
 				outputPrice: 15.0,
 			},
 		},
+		dial: {
+			"valid-model": {
+				maxTokens: 8192,
+				contextWindow: 200000,
+				supportsImages: true,
+				supportsPromptCache: false,
+				inputPrice: 3.0,
+				outputPrice: 15.0,
+			},
+		},
 		requesty: {},
 		unbound: {},
 		litellm: {},

@@ -40,13 +40,13 @@ export const Dial = ({
 
 	useEffect(() => {
 		if (typeof apiConfiguration?.dialBaseUrl === "undefined") {
-			setApiConfigurationField("dialBaseUrl", dialDefaultBaseUrl, false)
+			setApiConfigurationField("dialBaseUrl", dialDefaultBaseUrl)
 		}
 	}, [apiConfiguration?.dialBaseUrl, setApiConfigurationField])
 
 	useEffect(() => {
 		if (typeof apiConfiguration?.dialAzureApiVersion === "undefined") {
-			setApiConfigurationField("dialAzureApiVersion", dialDefaultApiVersion, false)
+			setApiConfigurationField("dialAzureApiVersion", dialDefaultApiVersion)
 		}
 	}, [apiConfiguration?.dialAzureApiVersion, setApiConfigurationField])
 
