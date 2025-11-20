@@ -45,6 +45,7 @@ const DialModelSchema = z.object({
 		.object({
 			cache: z.boolean().optional(),
 			prompt_cache: z.boolean().optional(),
+			tools: z.boolean().optional(),
 		})
 		.optional(),
 })
